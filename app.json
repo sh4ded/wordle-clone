@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "wordle-clone",
+    "slug": "wordle-clone",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "wordle-clone"
+}
