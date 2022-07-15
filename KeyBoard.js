@@ -1,36 +1,44 @@
 import React, { useState } from "react";
 import { StyleSheet, Button, View, Text } from "react-native";
 
-export default function KeyBoard() {
+export default function KeyBoard({text, setText, handleSubmit}) {
     const alpha = Array.from(Array(26)).map((e, i) => i + 65);
     const alphabets = alpha.map((x) => String.fromCharCode(x));
-    const [output, setOutput] = useState("HELLO");
+    //const [output, setOutput] = useState(text);
     const handleInput = (e) => {
         if (e === "ESC") {
-            setOutput((s) => {
+            /*setOutput((s) => {
+                let x = s.slice(0, -1);
+                return x;
+            });*/
+            setText((s) => {
                 let x = s.slice(0, -1);
                 return x;
             });
         } else if (e === "RET"){
-			
+			handleSubmit();
 		}
 		else if (e >= "A" && e <= "Z") {
-            if (output.length < 5) {
-                setOutput((s) => {
+            if (text.length < 5) {
+                /*setOutput((s) => {
+                    let x = s.concat(e);
+                    return x;
+                });*/
+                setText((s) => {
                     let x = s.concat(e);
                     return x;
                 });
             }
         }
     };
-    console.log(alphabets, alpha);
+    //console.log(alphabets, alpha);
     return (
         <View style={styles.box}>
-            <View style={styles.box}>
+            {/*<View style={styles.box}>
                 <Text>
-                    OUTPUT: <Text>{output}</Text>
+                    OUTPUT: <Text>{o}</Text>
                 </Text>
-            </View>
+            </View>*/}
             <View style={styles.container}>
                 {alphabets.map((c, i) => {
                     return (

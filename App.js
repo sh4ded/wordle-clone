@@ -8,16 +8,16 @@ import Word from "./word.js";
 export default function App() {
     useEffect(() => {
         console.log("rerendered!");
-    });
+    }, [sub]);
     const inputRef = useRef();
-    const checkWord = "lemon";
+    const checkWord = "LEMON";
     // State of a word
     const word = {
       str: "",
       submit: false,
     }
     const [words, setWords] = useState([]);
-
+    const [sub, setSub] = useState(0);
     const [text1, setText1] = useState(""); // Word
     const [done1, setDone1] = useState(false);  // Entered ?
 
@@ -191,9 +191,9 @@ export default function App() {
     return (
         <View style={styles.container}>
             <Text>Wordle</Text>
-            <TextInput
+            {/*<TextInput
                 ref={inputRef}
-                /*style={styles.input}*/
+                style={styles.input}
                 caretHidden
                 autoFocus={true}
                 placeholder="WORDLE"
@@ -213,14 +213,38 @@ export default function App() {
                 onChangeText={(newText) => handleChange(newText)}
                 onSubmitEditing={handleSubmit}
                 onLayout={() => inputRef.current.focus()}
-            />
+            />*/}
             <Word text={text1} cor={cor1} scor={scor1} done={done1} />
             <Word text={text2} cor={cor2} scor={scor2} done={done2} />
             <Word text={text3} cor={cor3} scor={scor3} done={done3} />
             <Word text={text4} cor={cor4} scor={scor4} done={done4} />
             <Word text={text5} cor={cor5} scor={scor5} done={done5} />
             <Word text={text6} cor={cor6} scor={scor6} done={done6} />
-            <KeyBoard />
+            <KeyBoard text={
+                    curr === 0
+                        ? text1
+                        : curr === 1
+                        ? text2
+                        : curr === 2
+                        ? text3
+                        : curr === 3
+                        ? text4
+                        : curr === 4
+                        ? text5
+                        : text6
+                } setText={
+                  curr === 0
+                        ? setText1
+                        : curr === 1
+                        ? setText2
+                        : curr === 2
+                        ? setText3
+                        : curr === 3
+                        ? setText4
+                        : curr === 4
+                        ? setText5
+                        : setText6
+                      } handleSubmit={handleSubmit} />
             <StatusBar style="auto" />
         </View>
     );

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 const Word = ({text, cor, scor, done}) => {
   let arr = text.split("");
   let ind = (text === '') ? -1 : text.length;
-  console.log(ind);
+  //console.log(ind);
   /*function handlePress (e, key) {
   	let temp = text;
   	setText(temp.substring(0,key)+" "+temp.substring(key+1));
