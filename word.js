@@ -3,12 +3,14 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { useEffect } from 'react';
 
-const Word = ({text, setText}) => {
+const Word = ({text, cor, scor, done}) => {
   let arr = text.split("");
-  function handlePress (e, key) {
+  let ind = (text === '') ? -1 : text.length;
+  console.log(ind);
+  /*function handlePress (e, key) {
   	let temp = text;
   	setText(temp.substring(0,key)+" "+temp.substring(key+1));
-  }
+  }*/
   for(let i = 0; i < 5; i++)
   {
   	if (!arr[i])
@@ -21,9 +23,8 @@ const Word = ({text, setText}) => {
         arr.map((s, i) => {
           return(
           <Text
-          key={i} 
-          onPress={e => handlePress(e, i)} 
-          style={styles.box}
+          key={i}  
+          style={[styles.box, (i < ind) ? styles.full : styles.empty, done ? ((cor.indexOf(i) !== -1) ? styles.correct : ((scor.indexOf(i) !== -1) ? styles.scorrect : styles.incorrect)) : null]}
           >{s}</Text>
         );
       })
@@ -44,10 +45,24 @@ const styles = StyleSheet.create({
 		margin : 10,
 		borderWidth : 2,
 		borderStyle : 'solid',
-		borderColor : 'black',
 		height : 50,
 		width : 50,
 		textAlign : 'center'
+	},
+	empty : {
+		borderColor : 'grey'
+	},
+	full : {
+		borderColor : 'black'
+	},
+	correct : {
+		borderColor : 'green'
+	},
+	scorrect : {
+		borderColor : 'yellow'
+	},
+	incorrect : {
+		borderColor : 'red'
 	}
 })
 export default Word;
