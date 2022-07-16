@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { StyleSheet, Button, View, Text } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import KeyBtn from "./KeyButton";
 
-
-export default function KeyBoard({ words, setWords, curr, handleSubmit, crct, pcrct, incrct }) {
+export default function KeyBoard({
+    words,
+    setWords,
+    curr,
+    handleSubmit,
+    crct,
+    pcrct,
+    incrct,
+}) {
     const alpha = Array.from(Array(26)).map((e, i) => i + 65);
     const alphabets = alpha.map((x) => String.fromCharCode(x));
     const handleInput = (e) => {
@@ -42,35 +50,28 @@ export default function KeyBoard({ words, setWords, curr, handleSubmit, crct, pc
             <View style={styles.container}>
                 {alphabets.map((c, i) => {
                     return (
-                        <View key={i} style={styles.btn}>
-                            <Button
-                                title={c}
-                                color={crct.indexOf(c) !== -1 ?
-                                    '#2b8744'
+                        <KeyBtn
+                            key={i}
+                            text={c}
+                            color={
+                                crct.indexOf(c) !== -1
+                                    ? "x"
                                     : pcrct.indexOf(c) !== -1
-                                    ? '#cfb94c'
+                                    ? "pcrct"
                                     : incrct.indexOf(c) !== -1
-                                    ? 'grey'
-                                    : "#2d2b38"}
-                                onPress={handleInput.bind(this, c)}
-                            ></Button>
-                        </View>
+                                    ? "incrct"
+                                    : "normal"
+                            }
+                            onPress={handleInput.bind(this, c)}
+                        />
                     );
                 })}
-                <View style={styles.btn}>
-                    <Button
-                        title="<-"
-                        color="#2d2b38"
-                        onPress={handleInput.bind(this, "ESC")}
-                    ></Button>
-                </View>
-                <View style={styles.btn}>
-                    <Button
-                        title="ENTER"
-                        color="#2d2b38"
-                        onPress={handleSubmit}
-                    ></Button>
-                </View>
+                <KeyBtn
+                    text="<-"
+                    color="normal"
+                    onPress={handleInput.bind(this, "ESC")}
+                />
+                <KeyBtn text="ENTER" color="normal" onPress={handleSubmit} />
             </View>
             <StatusBar style="auto" />
         </View>
@@ -92,13 +93,8 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         justifyContent: "space-evenly",
         alignContent: "center",
-        backgroundColor: 'lightgrey',
+        backgroundColor: "lightgrey",
         borderRadius: 5,
-        marginBottom: 20
-    },
-    btn: {
-        minWidth: 50,
-        height: 40,
-        margin: 1
+        marginBottom: 20,
     },
 });
