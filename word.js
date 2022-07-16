@@ -8,21 +8,18 @@ export default function Word({ text, color }) {
         <View style={styles.wordBox}>
             {arr.map((s, i) => {
                 return (
-                    <View
+                    <Text
                         key={i}
                         style={[
                             styles.letterBox,
-                            color[i] == "White"
-                                ? styles.White
-                                : color[i] == "Gray"
-                                ? styles.Gray
-                                : color[i] == "Green"
-                                ? styles.Green
-                                : styles.Yellow,
-                        ]}
-                    >
-                        <Text>{s}</Text>
-                    </View>
+                            color.indexOf('White') !== -1 ?
+                            (i < text.indexOf(' ') || text.indexOf(' ') === -1 ? styles.full : styles.empty) :
+                            (color[i] === 'Gray'
+                            	? styles.Gray
+                              : color[i] === 'Green'
+                              ? styles.Green
+                             	: styles.Yellow)
+                        ]}>{s}</Text>
                 );
             })}
         </View>
@@ -31,31 +28,41 @@ export default function Word({ text, color }) {
 
 const styles = StyleSheet.create({
     wordBox: {
-        flex: 1,
         flexDirection: "row",
-        justifyContent: "space-evenly",
+        justifyContent: "center"
     },
     letterBox: {
-        borderWidth: 2,
-        margin: 2,
-        height: 40,
-        width: 40,
-        textAlign: "center",
-        padding: 20,
+        fontSize : 20,
+				fontWeight : 'bold',
+				margin : 10,
+				height : 'auto',
+				width : 50,
+				paddingTop : 8,
+				paddingBottom : 8,
+				borderWidth : 2,
+				borderStyle : 'solid',
+				textAlign : 'center',
+				backgroundColor : '#fff'
     },
     Yellow: {
-        backgroundColor: "yellow",
-        color: "white",
+        color : 'white',
+				backgroundColor : '#cfb94c',
+				borderColor : '#cfb94c'
     },
     Green: {
-        backgroundColor: "green",
-        color: "white",
+    		backgroundColor : '#2b8744',
+				borderColor : '#2b8744',
+				color : 'white'
     },
     Gray: {
-        color: "white",
-        backgroundColor: "gray",
+        color : 'white',
+				backgroundColor : 'grey',
+				borderColor : 'grey',
     },
-    White: {
-        backgroundColor: "#ffffff",
+    empty: {
+        borderColor: 'grey'
     },
+    full: {
+    	borderColor: 'black'
+    }
 });
