@@ -1,57 +1,51 @@
 import React, { useState } from "react";
 import { StyleSheet, Button, View, Text } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
-export default function KeyBoard({text, setText, handleSubmit, cor, incor, scor, anim, setAnim}) {
+
+export default function KeyBoard({ words, setWords, curr, handleSubmit }) {
     const alpha = Array.from(Array(26)).map((e, i) => i + 65);
     const alphabets = alpha.map((x) => String.fromCharCode(x));
-    //const [output, setOutput] = useState(text);
-    console.log(cor);
-    console.log(incor);
     const handleInput = (e) => {
         if (e === "ESC") {
-            /*setOutput((s) => {
-                let x = s.slice(0, -1);
-                return x;
-            });*/
-            setText((s) => {
-                let x = s.slice(0, -1);
-                return x;
+            setWords((s) => {
+                const tmp = s.slice();
+                let x = tmp[curr];
+                x = {
+                    str: x.str.trim().slice(0, -1).padEnd(5, " "),
+                    submit: false,
+                    color: x.color,
+                };
+                tmp[curr] = x;
+                console.log(tmp);
+                return tmp;
             });
-            setAnim(false);
-        } else if (e === "RET"){
-            setAnim(true);
-			handleSubmit();
-		}
-		else if (e >= "A" && e <= "Z") {
-            if (text.length < 5) {
-                /*setOutput((s) => {
-                    let x = s.concat(e);
-                    return x;
-                });*/
-                setText((s) => {
-                    let x = s.concat(e);
-                    return x;
-                });
-                setAnim(true);
-            }
+        } else if (e >= "A" && e <= "Z") {
+            setWords((s) => {
+                const tmp = s.slice();
+                let x = tmp[curr];
+                if (x.str.trim().length < 5) {
+                    x = {
+                        str: x.str.trim().concat(e).padEnd(5, " "),
+                        submit: false,
+                        color: x.color,
+                    };
+                }
+                tmp[curr] = x;
+                console.log(tmp);
+                return tmp;
+            });
         }
     };
-    //console.log(alphabets, alpha);
     return (
         <View style={styles.box}>
-            {/*<View style={styles.box}>
-                <Text>
-                    OUTPUT: <Text>{o}</Text>
-                </Text>
-            </View>*/}
             <View style={styles.container}>
                 {alphabets.map((c, i) => {
                     return (
-                        <View style={styles.btn}>
+                        <View key={i} style={styles.btn}>
                             <Button
                                 title={c}
-                                key={i}
-                                color={(cor.indexOf(c) !== -1) ? '#2b8744' : (scor.indexOf(c) !== -1 ? '#cfb94c' : (incor.indexOf(c) !== -1 ? 'grey' : '#2d2b38'))}
+                                color="#2d2b38"
                                 onPress={handleInput.bind(this, c)}
                             ></Button>
                         </View>
@@ -59,19 +53,20 @@ export default function KeyBoard({text, setText, handleSubmit, cor, incor, scor,
                 })}
                 <View style={styles.btn}>
                     <Button
-                        title="ENTER"
-                        color="#2d2b38"
-                        onPress={handleInput.bind(this, "RET")}
-                    ></Button>
-                </View>
-                <View style={styles.btn}>
-                    <Button
-                        title="BKSPC"
+                        title="ESC"
                         color="#2d2b38"
                         onPress={handleInput.bind(this, "ESC")}
                     ></Button>
                 </View>
+                <View style={styles.btn}>
+                    <Button
+                        title="RET"
+                        color="#2d2b38"
+                        onPress={handleSubmit}
+                    ></Button>
+                </View>
             </View>
+            <StatusBar style="auto" />
         </View>
     );
 }
@@ -84,16 +79,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     container: {
-        flex: 2,
-        width: '90%',
+        flex: 1,
+        width: "80%",
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-evenly",
         alignContent: "center",
     },
     btn: {
-        minWidth: 50,
-        height: 40,
+        width: 50,
+        height: 50,
         margin: 5,
     },
 });
