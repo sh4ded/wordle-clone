@@ -46,33 +46,31 @@ export default function KeyBoard({
         }
     };
     return (
-        <View style={styles.box}>
-            <View style={styles.container}>
-                {alphabets.map((c, i) => {
-                    return (
-                        <KeyBtn
-                            key={i}
-                            text={c}
-                            color={
-                                crct.indexOf(c) !== -1
-                                    ? "x"
-                                    : pcrct.indexOf(c) !== -1
-                                    ? "pcrct"
-                                    : incrct.indexOf(c) !== -1
-                                    ? "incrct"
-                                    : "normal"
-                            }
-                            onPress={handleInput.bind(this, c)}
-                        />
-                    );
-                })}
-                <KeyBtn
-                    text="<-"
-                    color="normal"
-                    onPress={handleInput.bind(this, "ESC")}
-                />
-                <KeyBtn text="ENTER" color="normal" onPress={handleSubmit} />
-            </View>
+        <View style={styles.container}>
+            {alphabets.map((c, i) => {
+                return (
+                    <KeyBtn
+                        key={i}
+                        text={c}
+                        color={
+                            crct.indexOf(c) !== -1
+                                ? "x"
+                                : pcrct.indexOf(c) !== -1
+                                ? "pcrct"
+                                : incrct.indexOf(c) !== -1
+                                ? "incrct"
+                                : "normal"
+                        }
+                        onPress={handleInput.bind(this, c)}
+                    />
+                );
+            })}
+            <KeyBtn
+                text="<-"
+                color="normal"
+                onPress={handleInput.bind(this, "ESC")}
+            />
+            <KeyBtn text="ENTER" color="normal" onPress={handleSubmit} />
             <StatusBar style="auto" />
         </View>
     );
@@ -86,7 +84,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     container: {
-        marginTop: 80,
         flex: 1,
         width: "95%",
         flexDirection: "row",

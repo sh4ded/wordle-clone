@@ -87,10 +87,10 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
     },
     header: {
-        marginTop: 50,
+        marginTop: 10,
         fontSize: 50,
         fontWeight: 'bold',
-        marginBottom: 50
+        marginBottom: 10
     },
     box: {
         flex: 1,
