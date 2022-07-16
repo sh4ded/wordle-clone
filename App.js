@@ -1,13 +1,14 @@
-import { StatusBar } from "expo-status-bar";
+//import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { useState, useRef, useEffect } from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import KeyBoard from "./keyBoard.js";
+import { StyleSheet, Text, View, TextInput, Button, SafeAreaView, Platform, StatusBar } from "react-native";
+import KeyBoard from "./KeyBoard.js";
 import Word from "./word.js";
 
 export default function App() {
     useEffect(() => {
         console.log("rerendered!");
+        console.log('Height on: ', Platform.OS, StatusBar.currentHeight);
     }, [sub]);
     const inputRef = useRef();
     const checkWord = "LEMON";
@@ -16,11 +17,14 @@ export default function App() {
       str: "",
       submit: false,
     }
+    const [anim, setAnim] = useState(true);
     const [words, setWords] = useState([]);
     const [sub, setSub] = useState(0);
     const [text1, setText1] = useState(""); // Word
     const [done1, setDone1] = useState(false);  // Entered ?
-
+    const [cor, setCor] = useState([]);
+    const [incor, setIncor] = useState([]);
+    const [scor, setScor] = useState([]);
 
     const [cor1, setCor1] = useState([]);   // correctly placed letters
     const [scor1, setScor1] = useState([]); // Correct letter but wrongly placed
@@ -55,7 +59,7 @@ export default function App() {
         } else if (curr === 2) {
             ary = text3.split("");
         } else if (curr === 3) {
-            ary = text.split("");
+            ary = text4.split("");
         } else if (curr === 4) {
             ary = text5.split("");
         } else if (curr === 5) {
@@ -63,12 +67,20 @@ export default function App() {
         }
         console.log(ary);
         let nry = [];
+        let cnry = cor;
+        let incnry = incor;
+        let snry = scor;
         let yry = [];
         for (let i = 0; i < 5; i++) {
             if (ary[i] === checkWord.charAt(i)) {
                 nry += i;
+                cnry.push(checkWord.charAt(i));
             } else if (checkWord.indexOf(ary[i]) !== -1) {
                 yry += i;
+                snry.push(ary[i]);
+            }
+            else {
+              incnry.push(ary[i]);
             }
         }
         console.log(nry);
@@ -97,6 +109,8 @@ export default function App() {
             setScor6(yry);
             setDone6(true);
         }
+        setCor(cnry);
+        setIncor(incnry);
         setCurr(curr + 1);
     }
     function handleChange(newText) {
@@ -189,8 +203,9 @@ export default function App() {
     }*/
     }
     return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
         <View style={styles.container}>
-            <Text>Wordle</Text>
+            <Text style={{fontSize: 21, fontWeight: 'bold', paddingBottom: 20}}>WORDLE</Text>
             {/*<TextInput
                 ref={inputRef}
                 style={styles.input}
@@ -214,12 +229,12 @@ export default function App() {
                 onSubmitEditing={handleSubmit}
                 onLayout={() => inputRef.current.focus()}
             />*/}
-            <Word text={text1} cor={cor1} scor={scor1} done={done1} />
-            <Word text={text2} cor={cor2} scor={scor2} done={done2} />
-            <Word text={text3} cor={cor3} scor={scor3} done={done3} />
-            <Word text={text4} cor={cor4} scor={scor4} done={done4} />
-            <Word text={text5} cor={cor5} scor={scor5} done={done5} />
-            <Word text={text6} cor={cor6} scor={scor6} done={done6} />
+            <Word text={text1} cor={cor1} scor={scor1} done={done1} active={1} curr={curr} anim={anim}/>
+            <Word text={text2} cor={cor2} scor={scor2} done={done2} active={2} curr={curr} anim={anim}/>
+            <Word text={text3} cor={cor3} scor={scor3} done={done3} active={3} curr={curr} anim={anim}/>
+            <Word text={text4} cor={cor4} scor={scor4} done={done4} active={4} curr={curr} anim={anim}/>
+            <Word text={text5} cor={cor5} scor={scor5} done={done5} active={5} curr={curr} anim={anim}/>
+            <Word text={text6} cor={cor6} scor={scor6} done={done6} active={6} curr={curr} anim={anim}/>
             <KeyBoard text={
                     curr === 0
                         ? text1
@@ -244,9 +259,10 @@ export default function App() {
                         : curr === 4
                         ? setText5
                         : setText6
-                      } handleSubmit={handleSubmit} />
+                      } handleSubmit={handleSubmit} cor={cor} incor={incor} scor={scor} anim={anim} setAnim={setAnim}/>
             <StatusBar style="auto" />
         </View>
+        </SafeAreaView>
     );
 }
 
@@ -256,6 +272,7 @@ const styles = StyleSheet.create({
         width: 0,
     },
     container: {
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight+20 : 0,
         flex: 1,
         backgroundColor: "#fff",
         alignItems: "center",
