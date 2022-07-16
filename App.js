@@ -84,13 +84,13 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent: "flex-start"
     },
     header: {
-        marginTop: 50,
+        marginTop: 2,
         fontSize: 50,
         fontWeight: 'bold',
-        marginBottom: 50
+        marginBottom: 10
     },
     box: {
         flex: 1,

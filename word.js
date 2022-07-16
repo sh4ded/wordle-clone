@@ -32,11 +32,11 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     letterBox: {
-        fontSize : 20,
+        fontSize : 32,
 				fontWeight : 'bold',
-				margin : 10,
+				margin : 2,
 				height : 'auto',
-				width : 50,
+				width : 68,
 				paddingTop : 8,
 				paddingBottom : 8,
 				borderWidth : 2,
