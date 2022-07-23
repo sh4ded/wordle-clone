@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import KeyBtn from "./KeyButton";
 
@@ -25,7 +25,7 @@ export default function KeyBoard({
                     color: x.color,
                 };
                 tmp[curr] = x;
-                console.log(tmp);
+                //console.log(tmp);
                 return tmp;
             });
         } else if (e >= "A" && e <= "Z") {
@@ -40,7 +40,7 @@ export default function KeyBoard({
                     };
                 }
                 tmp[curr] = x;
-                console.log(tmp);
+                //console.log(tmp);
                 return tmp;
             });
         }
@@ -84,9 +84,9 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     container: {
-        marginTop: '55%',
+        marginTop: 40,
         flex: 1,
-        width: "95%",
+        width: Platform.OS === 'web' ? "40%" : "95%",
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-evenly",
