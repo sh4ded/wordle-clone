@@ -3,9 +3,13 @@
     "name": "wordle-clone",
     "slug": "wordle-clone",
     "version": "1.0.0",
+    "orientation": "portrait",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.sh4ded.wordleclone"
+    }
   },
   "name": "wordle-clone"
 }

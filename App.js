@@ -1,265 +1,161 @@
 //import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { useState, useRef, useEffect } from "react";
-import { StyleSheet, Text, View, TextInput, Button, SafeAreaView, Platform, StatusBar } from "react-native";
-import KeyBoard from "./KeyBoard.js";
-import Word from "./word.js";
+import { useState, useEffect } from "react";
+import { StyleSheet, Text, View, SafeAreaView, Platform, StatusBar, DevSettings, Alert } from "react-native";
+import KeyBoard from "./KeyBoard";
+import Word from "./word";
+import axios from "axios";
+import {Restart} from 'fiction-expo-restart';
+//import getAll from './wordlist.js'
 
 export default function App() {
+    const [todayWord, setTodayWord] = useState("");
+    const [curr, setCurr] = useState(0); //Current Try
+    const [allWords, setAllWords] = useState([]);
+    const fetchData = async () => {
+        let location1 = "https://static.nytimes.com/newsgraphics/2022/01/25/wordle-solver/assets/solutions.txt";
+        let location2 = "https://raw.githubusercontent.com/tabatkins/wordle-list/main/words";
+        await fetch(location1)
+        .then((response) => response.text())
+        .then((result) => {
+            //setAllWords(result.split('\n'));
+            setTodayWord(result.split('\n')[Math.floor(Math.random() * 2310)].toUpperCase());
+        });
+        await fetch(location2)
+        .then((response) => response.text())
+        .then((result) => {
+            setAllWords(result.split('\n'));
+        })
+    };
     useEffect(() => {
-        console.log("rerendered!");
-        console.log('Height on: ', Platform.OS, StatusBar.currentHeight);
-    }, [sub]);
-    const inputRef = useRef();
-    const checkWord = "LEMON";
-    // State of a word
-    const word = {
-      str: "",
-      submit: false,
-    }
-    const [anim, setAnim] = useState(true);
-    const [words, setWords] = useState([]);
-    const [sub, setSub] = useState(0);
-    const [text1, setText1] = useState(""); // Word
-    const [done1, setDone1] = useState(false);  // Entered ?
-    const [cor, setCor] = useState([]);
-    const [incor, setIncor] = useState([]);
-    const [scor, setScor] = useState([]);
-
-    const [cor1, setCor1] = useState([]);   // correctly placed letters
-    const [scor1, setScor1] = useState([]); // Correct letter but wrongly placed
-
-    const [text2, setText2] = useState("");
-    const [done2, setDone2] = useState(false);
-    const [cor2, setCor2] = useState([]);
-    const [scor2, setScor2] = useState([]);
-    const [text3, setText3] = useState("");
-    const [done3, setDone3] = useState(false);
-    const [cor3, setCor3] = useState([]);
-    const [scor3, setScor3] = useState([]);
-    const [text4, setText4] = useState("");
-    const [done4, setDone4] = useState(false);
-    const [cor4, setCor4] = useState([]);
-    const [scor4, setScor4] = useState([]);
-    const [text5, setText5] = useState("");
-    const [done5, setDone5] = useState(false);
-    const [cor5, setCor5] = useState([]);
-    const [scor5, setScor5] = useState([]);
-    const [text6, setText6] = useState("");
-    const [done6, setDone6] = useState(false);
-    const [cor6, setCor6] = useState([]);
-    const [scor6, setScor6] = useState([]);
-    const [curr, setCurr] = useState(0);
-    function handleSubmit() {
-        let ary = [];
-        if (curr === 0) {
-            ary = text1.split("");
-        } else if (curr === 1) {
-            ary = text2.split("");
-        } else if (curr === 2) {
-            ary = text3.split("");
-        } else if (curr === 3) {
-            ary = text4.split("");
-        } else if (curr === 4) {
-            ary = text5.split("");
-        } else if (curr === 5) {
-            ary = text6.split("");
-        }
-        console.log(ary);
-        let nry = [];
-        let cnry = cor;
-        let incnry = incor;
-        let snry = scor;
-        let yry = [];
-        for (let i = 0; i < 5; i++) {
-            if (ary[i] === checkWord.charAt(i)) {
-                nry += i;
-                cnry.push(checkWord.charAt(i));
-            } else if (checkWord.indexOf(ary[i]) !== -1) {
-                yry += i;
-                snry.push(ary[i]);
-            }
-            else {
-              incnry.push(ary[i]);
-            }
-        }
-        console.log(nry);
-        if (curr === 0) {
-            setCor1(nry);
-            setScor1(yry);
-            setDone1(true);
-        } else if (curr === 1) {
-            setCor2(nry);
-            setScor2(yry);
-            setDone2(true);
-        } else if (curr === 2) {
-            setCor3(nry);
-            setScor3(yry);
-            setDone3(true);
-        } else if (curr === 3) {
-            setCor4(nry);
-            setScor4(yry);
-            setDone4(true);
-        } else if (curr === 4) {
-            setCor5(nry);
-            setScor5(yry);
-            setDone5(true);
-        } else if (curr === 5) {
-            setCor6(nry);
-            setScor6(yry);
-            setDone6(true);
-        }
-        setCor(cnry);
-        setIncor(incnry);
-        setCurr(curr + 1);
-    }
-    function handleChange(newText) {
-        if (curr === 0) {
-            if (newText) {
-                if (newText.length <= 5) {
-                    setText1(newText);
-                }
-            } else {
-                setText1(newText);
-            }
-        } else if (curr === 1) {
-            if (newText) {
-                if (newText.length <= 5) {
-                    setText2(newText);
-                }
-            } else {
-                setText2(newText);
-            }
-        } else if (curr === 2) {
-            if (newText) {
-                if (newText.length <= 5) {
-                    setText3(newText);
-                }
-            } else {
-                setText3(newText);
-            }
-        } else if (curr === 3) {
-            if (newText) {
-                if (newText.length <= 5) {
-                    setText4(newText);
-                }
-            } else {
-                setText4(newText);
-            }
-        } else if (curr === 4) {
-            if (newText) {
-                if (newText.length <= 5) {
-                    setText5(newText);
-                }
-            } else {
-                setText5(newText);
-            }
-        } else if (curr === 5) {
-            if (newText) {
-                if (newText.length <= 5) {
-                    setText6(newText);
-                }
-            } else {
-                setText6(newText);
-            }
-        }
-        /*let j = text.indexOf(' ');
-    console.log(j);
-    console.log("."+newText+".");
-    if (j === -1)
+        if (curr === 0)
+        {
+            fetchData();
+        /*axios.get('https://random-word-api.herokuapp.com/word?length=5')
+  .then(function (response) {
+    // handle success
+    setTodayWord(response.data[0].toUpperCase())
+    console.log(response.data[0]);
+  })
+  .catch(error => {
+    alert('Server Down! Please Try Again After Sometime!')
+  })*/
+  }
+  if (curr > 0)
+  {
+    console.log(words[curr-1].color.filter(x => x === 'Green').length)
+    if (words[curr-1].color.filter(x => x === 'Green').length === 5)
     {
-      if (newText.length <= 5)
-      {
-        setText(newText);
-      }
+        Alert.alert(
+      "YOU WON!",
+      "Wanna Play Again?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () =>   Restart() }
+      ]
+    );
     }
     else
     {
-      if (newText)
-      {
-        if (newText.length < text.length)
+        if (curr === 6)
         {
-          if (newText.slice(-1) === ' ')
-          {
-            setText(newText.replace(/\s*$/, ""));
-          }
-          else
-          {
-            if (text.slice(-1) === ' ')
+            Alert.alert(
+      "GAME OVER! :)",
+      "The word was " + todayWord + "\nWanna Play Again?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => Restart() }
+      ]
+    );
+        }
+    }
+  }
+}, [curr])
+    let word = {
+        str: "     ",
+        submit: false,
+        color: ["White", "White", "White", "White", "White"]
+    };
+    const [words, setWords] = useState([word, word, word, word, word, word]);
+    const [crct, setCrct] = useState([]); //List of correct letters found yet (right position)
+    const [pcrct, setPcrct] = useState([]); //List of partially correct letters found yet (wrong position)
+    const [incrct, setIncrct] = useState([]); //List of invalid letters
+    const handleSubmit = () => {
+        if (words[curr].str.trim().length == 5) {
+            if (allWords.indexOf(words[curr].str.toLowerCase()) !== -1)
             {
-              setText(newText.slice(0,-1).replace(/\s*$/, ""));
-            }
-            else
-            {
-              setText(newText);
-            }
-          }
+            setWords((s) => {
+                let tmp = s.slice();
+                let c_tmp = crct; //Tmp for crct update
+                let pc_tmp = pcrct; //"""
+                let ic_tmp = incrct; //"""
+                let x = tmp[curr];
+                let checkWord = tmp[curr].str;
+                let flagWord = todayWord;
+                const arr = ["Gray","Gray","Gray","Gray","Gray"];
+                for (let i = 0; i < 5; i++) {
+                    let c = checkWord.charAt(i);
+                    if (c === flagWord.charAt(i)) {
+                        arr[i] = "Green";
+                        flagWord = flagWord.replace(c, " ");
+                        c_tmp.push(c);
+                    }
+                }
+                for (let i = 0; i < 5; i++) {
+                    let c = checkWord.charAt(i);
+                    if (flagWord.indexOf(c) !== -1 && arr[i] != "Green") {
+                        arr[i] = "Yellow";
+                        flagWord = flagWord.replace(c, " ");
+                        pc_tmp.push(c);
+                    }
+                    else {
+                        ic_tmp.push(c);
+                    }
+                    console.log(flagWord);
+                }
+                x = { str: x.str, submit: true, color: arr };
+                tmp[curr] = x;
+                setCrct(c_tmp);
+                setPcrct(pc_tmp);
+                setIncrct(ic_tmp);
+                //console.log(tmp);
+                return tmp;
+            });
+            setCurr((s) => s + 1);
         }
         else
         {
-          setText(text.substring(0,j)+newText.slice(-1)+text.substring(j+1,5));
+            alert("Not a valid word!");
         }
-      }
-    }*/
-    }
+        } else {
+            alert("Fill the cells");
+        }
+    };
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
         <View style={styles.container}>
-            <Text style={{fontSize: 21, fontWeight: 'bold', paddingBottom: 20}}>WORDLE</Text>
-            {/*<TextInput
-                ref={inputRef}
-                style={styles.input}
-                caretHidden
-                autoFocus={true}
-                placeholder="WORDLE"
-                value={
-                    curr === 0
-                        ? text1
-                        : curr === 1
-                        ? text2
-                        : curr === 2
-                        ? text3
-                        : curr === 3
-                        ? text4
-                        : curr === 4
-                        ? text5
-                        : text6
-                }
-                onChangeText={(newText) => handleChange(newText)}
-                onSubmitEditing={handleSubmit}
-                onLayout={() => inputRef.current.focus()}
-            />*/}
-            <Word text={text1} cor={cor1} scor={scor1} done={done1} active={1} curr={curr} anim={anim}/>
-            <Word text={text2} cor={cor2} scor={scor2} done={done2} active={2} curr={curr} anim={anim}/>
-            <Word text={text3} cor={cor3} scor={scor3} done={done3} active={3} curr={curr} anim={anim}/>
-            <Word text={text4} cor={cor4} scor={scor4} done={done4} active={4} curr={curr} anim={anim}/>
-            <Word text={text5} cor={cor5} scor={scor5} done={done5} active={5} curr={curr} anim={anim}/>
-            <Word text={text6} cor={cor6} scor={scor6} done={done6} active={6} curr={curr} anim={anim}/>
-            <KeyBoard text={
-                    curr === 0
-                        ? text1
-                        : curr === 1
-                        ? text2
-                        : curr === 2
-                        ? text3
-                        : curr === 3
-                        ? text4
-                        : curr === 4
-                        ? text5
-                        : text6
-                } setText={
-                  curr === 0
-                        ? setText1
-                        : curr === 1
-                        ? setText2
-                        : curr === 2
-                        ? setText3
-                        : curr === 3
-                        ? setText4
-                        : curr === 4
-                        ? setText5
-                        : setText6
-                      } handleSubmit={handleSubmit} cor={cor} incor={incor} scor={scor} anim={anim} setAnim={setAnim}/>
+            <View>
+                <Text style={styles.header}>WORDLE</Text>
+            </View>
+            {words.map((s, i) => {
+                return <Word text={s.str} color={s.color} key={i} />;
+            })}
+            <KeyBoard
+                words={words}
+                setWords={setWords}
+                handleSubmit={handleSubmit}
+                curr={curr}
+                crct={crct}
+                pcrct={pcrct}
+                incrct={incrct}
+            />
             <StatusBar style="auto" />
         </View>
         </SafeAreaView>
@@ -267,15 +163,23 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-    input: {
-        height: 0,
-        width: 0,
-    },
     container: {
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight+20 : 0,
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         flex: 1,
         backgroundColor: "#fff",
         alignItems: "center",
+        justifyContent: "flex-start"
+    },
+    header: {
+        marginTop: 2,
+        fontSize: 50,
+        fontWeight: 'bold',
+        marginBottom: 10
+    },
+    box: {
+        flex: 1,
+        alignItems: "center",
         justifyContent: "center",
+        minHeight: '40%'
     },
 });
